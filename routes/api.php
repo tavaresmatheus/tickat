@@ -21,10 +21,10 @@ Route::middleware(['auth:sanctum'])->get('/users', function (Request $request) {
 
 Route::get('/users', [UserController::class, 'listAllUsers']);
 
-Route::get('/users/{id}', [UserController::class, 'findUser']);
+Route::get('/users/{id}', [UserController::class, 'findUser'])->whereUuid('id');
 
 Route::post('/users', [UserController::class, 'registerUser']);
 
-Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
+Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->whereUuid('id');
 
-Route::put('/users/{id}', [UserController::class, 'updateUser']);
+Route::put('/users/{id}', [UserController::class, 'updateUser'])->whereUuid('id');

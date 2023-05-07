@@ -18,7 +18,7 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->object->all();
     }
 
-    public function findById(string $id): object
+    public function findById(string $id): ?object
     {
         return $this->object->find($id);
     }
@@ -29,17 +29,15 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     public function update(
-        string $id,
+        object $model,
         array $attributes
     ): bool
     {
-        return $this->object->find($id)->update($attributes);
+        return $model->update($attributes);
     }
 
-    public function delete(string $id): bool
+    public function delete(object $model): bool
     {
-        $model = $this->findById($id);
-
         return $model->delete();
     }
 }

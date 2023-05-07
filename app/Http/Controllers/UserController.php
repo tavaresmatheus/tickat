@@ -2,46 +2,86 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Businesses\Contracts\UserBusinessInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    protected UserRepositoryInterface $userRepository;
+    protected UserBusinessInterface $userBusiness;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserBusinessInterface $userBusiness)
     {
-        $this->userRepository = $userRepository;
+        $this->userBusiness = $userBusiness;
     }
 
-    public function listAllUsers()
+    public function listAllUsers(): JsonResponse
     {
-        return response(
-            $this->userRepository->listAll(),
+        return response()->json(
+            [
+                'message' => 'Success.',
+                'listOfUsers' => $this->userBusiness->listAllUsers(),
+            ],
             200
         );
     }
 
     public function findUser(string $id)
     {
-        return response(
-            $this->userRepository->findById($id),
+        return response()->json(
+            [
+                'message' => 'Success.',
+                'userDetailed' => $this->userBusiness->findUser($id),
+            ],
             200
         );
     }
 
     public function registerUser(Request $request)
     {
-        return response(
-            $this->userRepository->create($request->all()),
+        $userBusiness = $this->userBusiness->registerUser($request->all());
+
+        if (
+            $userBusiness instanceof \Illuminate\Support\MessageBag &&
+            $userBusiness->isNotEmpty()
+        ) {
+            return response()->json(
+                [
+                    'message' => 'Failed.',
+                    'validationErrors' => $userBusiness,
+                ],
+                422
+            );
+        }
+
+        return response()->json(
+            [
+                'message' => 'Success.',
+                'userRegistered' => $userBusiness,
+            ],
             200
         );
     }
 
     public function deleteUser(string $id)
     {
-        return response(
-            $this->userRepository->delete($id),
+        $userBusiness = $this->userBusiness->deleteUser($id);
+
+        if ($userBusiness === false) {
+            return response()->json(
+                [
+                    'message' => 'Failed.',
+                    'deletionError' => 'User doesn\'t exist.',
+                ],
+                422
+            );
+        }
+
+        return response()->json(
+            [
+                'message' => 'Success.',
+                'userDeleted' => "User $id gone."
+            ],
             200
         );
     }
@@ -51,11 +91,40 @@ class UserController extends Controller
         Request $request
     )
     {
-        return response(
-            $this->userRepository->update(
-                $id,
-                $request->all()
-            )
+        $userBusiness = $this->userBusiness->updateUser(
+            $id,
+            $request->all()
+        );
+
+        if (empty($userBusiness)) {
+            return response()->json(
+                [
+                    'message' => 'Failed.',
+                    'updateError' => 'User doesn\'t exist.',
+                ],
+                422
+            );
+        }
+
+        if (
+            $userBusiness instanceof \Illuminate\Support\MessageBag &&
+            $userBusiness->isNotEmpty()
+        ) {
+            return response()->json(
+                [
+                    'message' => 'Failed.',
+                    'validationErrors' => $userBusiness,
+                ],
+                422
+            );
+        }
+
+        return response()->json(
+            [
+                'message' => 'Success.',
+                'updatedUser' => $userBusiness,
+            ],
+            200
         );
     }
 }

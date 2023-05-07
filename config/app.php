@@ -172,6 +172,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\UserRepositoryServiceProvider::class,
+        App\Providers\UserBusinessServiceProvider::class,
     ])->toArray(),
 
     /*
