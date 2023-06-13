@@ -4,6 +4,7 @@ namespace App\Businesses;
 
 use App\Businesses\Contracts\UserBusinessInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserBusiness implements UserBusinessInterface
@@ -25,6 +26,12 @@ class UserBusiness implements UserBusinessInterface
 
         return $this->userRepository->findById($id);
     }
+
+    public function findUserByEmail(string $email): ?object
+    {
+        return $this->userRepository->findUserByEmail($email);
+    }
+
 
     public function listAllUsers(): object
     {
@@ -48,6 +55,8 @@ class UserBusiness implements UserBusinessInterface
         if ($validator->fails()) {
             return $validator->errors();
         }
+
+        $attributes['password'] = Hash::make($attributes['password']);
 
         return $this->userRepository->create($attributes);
     }

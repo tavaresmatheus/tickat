@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +14,16 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/users', [UserController::class, 'listAllUsers']);
 
-Route::middleware(['auth:sanctum'])->get('/users', function (Request $request) {
-    return $request->user();
+    Route::get('/users/{id}', [UserController::class, 'findUser'])->whereUuid('id');
+
+    Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->whereUuid('id');
+
+    Route::put('/users/{id}', [UserController::class, 'updateUser'])->whereUuid('id');
 });
 
-Route::get('/users', [UserController::class, 'listAllUsers']);
+Route::post('auth/login', [AuthController::class, 'login']);
 
-Route::get('/users/{id}', [UserController::class, 'findUser'])->whereUuid('id');
-
-Route::post('/users', [UserController::class, 'registerUser']);
-
-Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->whereUuid('id');
-
-Route::put('/users/{id}', [UserController::class, 'updateUser'])->whereUuid('id');
+Route::post('auth/register', [AuthController::class, 'register']);

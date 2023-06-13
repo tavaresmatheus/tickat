@@ -37,32 +37,6 @@ class UserController extends Controller
         );
     }
 
-    public function registerUser(Request $request)
-    {
-        $userBusiness = $this->userBusiness->registerUser($request->all());
-
-        if (
-            $userBusiness instanceof \Illuminate\Support\MessageBag &&
-            $userBusiness->isNotEmpty()
-        ) {
-            return response()->json(
-                [
-                    'message' => 'Failed.',
-                    'validationErrors' => $userBusiness,
-                ],
-                422
-            );
-        }
-
-        return response()->json(
-            [
-                'message' => 'Success.',
-                'userRegistered' => $userBusiness,
-            ],
-            200
-        );
-    }
-
     public function deleteUser(string $id)
     {
         $userBusiness = $this->userBusiness->deleteUser($id);
