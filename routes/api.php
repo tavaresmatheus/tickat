@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,15 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/users', [UserController::class, 'listAllUsers']);
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users', 'listAllUsers');
 
-    Route::get('/users/{id}', [UserController::class, 'findUser'])->whereUuid('id');
+        Route::get('/users/{id}', 'findUser')->whereUuid('id');
 
-    Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->whereUuid('id');
+        Route::delete('/users/{id}', 'deleteUser')->whereUuid('id');
 
-    Route::put('/users/{id}', [UserController::class, 'updateUser'])->whereUuid('id');
+        Route::put('/users/{id}', 'updateUser')->whereUuid('id');
+    });
+
+    Route::controller(EventController::class)->group(function () {
+        Route::get('/events', 'index');
+    });
 });
 
-Route::post('auth/login', [AuthController::class, 'login']);
+Route::controller(AuthController::class)->group(function () {
+    Route::post('auth/login', 'login');
 
-Route::post('auth/register', [AuthController::class, 'register']);
+    Route::post('auth/register', 'register');
+});

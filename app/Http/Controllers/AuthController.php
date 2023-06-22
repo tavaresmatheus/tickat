@@ -58,6 +58,7 @@ class AuthController extends Controller
         $credentials = $request->only(
             'name',
             'email',
+            'phone',
             'password'
         );
 

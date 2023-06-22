@@ -173,6 +173,7 @@ return [
 
         App\Providers\UserRepositoryServiceProvider::class,
         App\Providers\UserBusinessServiceProvider::class,
+        App\Providers\EventRepositoryServiceProvider::class,
     ])->toArray(),
 
     /*

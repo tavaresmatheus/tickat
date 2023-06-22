@@ -23,6 +23,7 @@ class UserFactory extends Factory
         return [
             'name' => $firstName . ' ' . $lastName,
             'email' => strtolower($firstName) . '.' . strtolower($lastName) . '@' . $safeEmailDomain,
+            'phone' => fake()->phoneNumber(),
             'email_verified_at' => now(),
             'password' => password_hash(fake()->password(), PASSWORD_BCRYPT),
             'remember_token' => Str::random(10),
