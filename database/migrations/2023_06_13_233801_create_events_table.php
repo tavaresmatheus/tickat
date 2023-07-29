@@ -23,7 +23,7 @@ return new class extends Migration
                 ->on('users');
             $table->string('status');
             $table->string('category');
-            $table->string('capacity');
+            $table->bigInteger('capacity');
             $table->timestamps();
         });
     }

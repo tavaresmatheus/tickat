@@ -174,6 +174,7 @@ return [
         App\Providers\UserRepositoryServiceProvider::class,
         App\Providers\UserBusinessServiceProvider::class,
         App\Providers\EventRepositoryServiceProvider::class,
+        App\Providers\EventBusinessServiceProvider::class,
     ])->toArray(),
 
     /*
