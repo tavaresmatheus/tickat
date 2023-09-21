@@ -1,7 +1,9 @@
 version: '3.7'
 services:
   tickat-php:
-    build: ./docker/dev/php-fpm
+    build:
+      context: .
+      dockerfile: ./docker/dev/php-fpm/Dockerfile
     container_name: tickat-php
     volumes:
       - ./:/var/www/html
