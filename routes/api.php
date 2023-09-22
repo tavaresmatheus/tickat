@@ -39,6 +39,13 @@ Route::middleware(['auth:sanctum', 'return-json'])->group(function () {
             'createEvent'
         );
     });
+
+    Route::controller(AuthController::class)->group(function () {
+        Route::post(
+            'auth/logout',
+            'logout'
+        );
+    });
 });
 
 Route::controller(AuthController::class)->group(function () {

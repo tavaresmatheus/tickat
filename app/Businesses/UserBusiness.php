@@ -12,7 +12,7 @@ class UserBusiness implements UserBusinessInterface
     protected UserRepositoryInterface $userRepository;
 
     public function __construct(
-        UserRepositoryInterface $userRepository,
+        UserRepositoryInterface $userRepository
     )
     {
         $this->userRepository = $userRepository;

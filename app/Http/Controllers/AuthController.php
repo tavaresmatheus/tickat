@@ -6,6 +6,7 @@ use App\Businesses\UserBusiness;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -50,6 +51,24 @@ class AuthController extends Controller
                 'token' => 'Invalid credentials.',
             ],
             422
+        );
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $token = $request->bearerToken();
+
+        $tokenInformation = PersonalAccessToken::findToken($token);
+
+        $user = $this->userBusiness->findUser($tokenInformation['tokenable_id']);
+
+        $user->tokens()->delete();
+
+        return response()->json(
+            [
+                'message' => 'Success.',
+            ],
+            200
         );
     }
 
